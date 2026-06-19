@@ -1,0 +1,22 @@
+{
+  "name": "13tm-web",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Static website for the band 13 Til Midnight",
+  "type": "module",
+  "scripts": {
+    "lint:html": "html-validate \"*.html\"",
+    "lint:css": "stylelint \"css/**/*.css\"",
+    "lint:js": "eslint \"js/**/*.js\"",
+    "check:links": "node scripts/check-links.mjs",
+    "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
+    "test": "npm run lint && npm run check:links"
+  },
+  "devDependencies": {
+    "eslint": "^9.16.0",
+    "globals": "^15.13.0",
+    "html-validate": "^9.7.1",
+    "stylelint": "^16.11.0",
+    "stylelint-config-standard": "^36.0.1"
+  }
+}

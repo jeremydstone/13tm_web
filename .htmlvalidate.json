@@ -1,0 +1,10 @@
+{
+  "extends": ["html-validate:recommended"],
+  "rules": {
+    "heading-level": ["error", { "minInitialRank": "h2" }],
+    "no-inline-style": "off",
+    "prefer-native-element": "off",
+    "void-style": "off",
+    "no-autoplay": ["error", { "exclude": ["video"] }]
+  }
+}

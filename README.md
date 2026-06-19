@@ -26,6 +26,31 @@ python3 -m http.server 8000
 
 (Opening the files via `file://` mostly works too, but a server is closer to production.)
 
+## Tests / linting
+
+The site itself ships no dependencies, but there's dev-only tooling to catch mistakes.
+Install once, then run the checks:
+
+```bash
+npm install     # one-time, pulls dev tools into node_modules (gitignored)
+npm test        # runs everything below
+```
+
+Individual checks:
+
+| Command | What it does |
+|---------|--------------|
+| `npm run lint:html` | Validates the HTML (`html-validate`) — broken markup, a11y issues, bad attributes |
+| `npm run lint:css`  | Lints the CSS (`stylelint`) — invalid values, unknown properties, duplicates |
+| `npm run lint:js`   | Lints the JS (`eslint`) — undefined vars, likely bugs |
+| `npm run check:links` | Verifies every local `href`/`src` in the HTML points at a file that exists |
+| `npm test` | All of the above |
+
+**Always run `npm test` before opening a PR.** The same suite runs automatically in CI
+(GitHub Actions, `.github/workflows/ci.yml`) on every pull request and push to `main`, so a
+red build blocks the merge. Known intentionally-pending assets (e.g. `assets/hero.mp4`) are
+allow-listed in `scripts/check-links.mjs` so they don't fail the link check.
+
 ---
 
 ## Dropping in the real content

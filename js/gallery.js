@@ -167,11 +167,13 @@
     current = i;
     showCurrent();
     lb.classList.add("is-open");
+    lb.removeAttribute("inert");
     lb.setAttribute("aria-hidden", "false");
     document.body.style.overflow = "hidden";
   }
   function closeLightbox() {
     lb.classList.remove("is-open");
+    lb.setAttribute("inert", "");
     lb.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
   }
