@@ -17,10 +17,10 @@
   --muted: #a2a6b4;
   --muted-2: #6f7484;
 
-  /* Neon-midnight accent (used sparingly + for logo glow) */
+  /* Electric-blue accent (used sparingly + for logo glow) */
   --accent: #6cc6ff;
-  --accent-2: #ff5db1;
-  --accent-grad: linear-gradient(100deg, #ff5db1 0%, #a06bff 45%, #6cc6ff 100%);
+  --accent-2: #1746c7;
+  --accent-grad: linear-gradient(100deg, #1746c7 0%, #3b9eff 50%, #6cc6ff 100%);
 
   --font-display: "Space Grotesk", system-ui, sans-serif;
   --font-body: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
@@ -57,9 +57,9 @@ body::before {
   inset: 0;
   z-index: -2;
   background:
-    radial-gradient(1100px 700px at 78% -8%, rgba(160, 107, 255, 0.16), transparent 60%),
+    radial-gradient(1100px 700px at 78% -8%, rgba(59, 158, 255, 0.16), transparent 60%),
     radial-gradient(900px 600px at 8% 12%, rgba(108, 198, 255, 0.12), transparent 55%),
-    radial-gradient(1200px 800px at 50% 110%, rgba(255, 93, 177, 0.10), transparent 60%),
+    radial-gradient(1200px 800px at 50% 110%, rgba(23, 70, 199, 0.14), transparent 60%),
     linear-gradient(180deg, var(--bg-1), var(--bg-0) 60%);
 }
 body::after {
@@ -234,7 +234,7 @@ h1, h2, h3, h4 {
   z-index: 2;
   width: min(560px, 76vw);
   margin-bottom: clamp(48px, 9vh, 110px);
-  filter: drop-shadow(0 6px 30px rgba(255, 93, 177, 0.35)) drop-shadow(0 0 50px rgba(108, 198, 255, 0.25));
+  filter: drop-shadow(0 6px 30px rgba(59, 158, 255, 0.40)) drop-shadow(0 0 50px rgba(108, 198, 255, 0.25));
 }
 .scroll-cue {
   position: absolute;
@@ -278,7 +278,7 @@ h1, h2, h3, h4 {
   inset: 0;
   z-index: -1;
   background:
-    radial-gradient(700px 380px at 80% -40%, rgba(160, 107, 255, 0.20), transparent 60%),
+    radial-gradient(700px 380px at 80% -40%, rgba(59, 158, 255, 0.20), transparent 60%),
     radial-gradient(600px 360px at 5% -30%, rgba(108, 198, 255, 0.16), transparent 60%);
 }
 .page-hero__eyebrow {
@@ -435,31 +435,29 @@ h1, h2, h3, h4 {
 }
 .capsules {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  flex-direction: column;
+  gap: 2px;
 }
 .capsule {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 9px 16px;
-  border-radius: 999px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  font-size: 0.9rem;
+  gap: 12px;
+  padding: 6px 0;
+  font-size: 1rem;
   color: var(--muted);
-  transition: border-color 0.25s var(--ease), color 0.25s var(--ease), transform 0.25s var(--ease);
+  transition: color 0.2s var(--ease);
 }
-.capsule:hover { color: var(--fg); border-color: var(--border-strong); transform: translateY(-2px); }
+.capsule:hover { color: var(--fg); }
 .capsule .cap-date {
   font-family: var(--font-display);
   font-weight: 600;
   color: var(--fg);
-  font-size: 0.82rem;
+  font-size: 0.92rem;
   letter-spacing: 0.04em;
   white-space: nowrap;
+  min-width: 96px;
 }
-.capsule .cap-sep { width: 1px; height: 14px; background: var(--border-strong); }
+.capsule .cap-sep { width: 1px; height: 13px; background: var(--border-strong); flex: 0 0 auto; }
 
 /* ------------------------------ Gallery (PICS) ------------------------------ */
 .gallery {
@@ -581,6 +579,19 @@ h1, h2, h3, h4 {
   height: 100%;
   border: 0;
 }
+.reels-more {
+  text-align: center;
+  margin-top: clamp(32px, 6vh, 64px);
+  color: var(--muted);
+  font-size: 1.05rem;
+}
+.reels-more a {
+  color: var(--accent);
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.25s var(--ease);
+}
+.reels-more a:hover { border-color: var(--accent); }
 
 /* ------------------------------ Contact form ------------------------------ */
 .contact-grid {
