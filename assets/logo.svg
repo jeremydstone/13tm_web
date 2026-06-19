@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 220" width="720" height="220" role="img" aria-label="13 Til Midnight">
+  <defs>
+    <linearGradient id="neon" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ff5db1"/>
+      <stop offset="0.5" stop-color="#a06bff"/>
+      <stop offset="1" stop-color="#6cc6ff"/>
+    </linearGradient>
+  </defs>
+  <g font-family="'Space Grotesk', sans-serif" text-anchor="middle">
+    <text x="360" y="108" font-size="118" font-weight="700" fill="url(#neon)" letter-spacing="2">13</text>
+    <text x="360" y="170" font-size="50" font-weight="600" fill="#f3f4f8" letter-spacing="14">TIL MIDNIGHT</text>
+  </g>
+</svg>
