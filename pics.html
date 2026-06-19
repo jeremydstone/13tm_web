@@ -15,7 +15,7 @@
   <header class="site-header is-fixed" data-sticky>
     <div class="container">
       <div class="nav-left">
-        <button class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <button type="button" class="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
           <span></span><span></span><span></span>
         </button>
         <nav class="nav" aria-label="Primary">
@@ -53,17 +53,17 @@
   </main>
 
   <!-- Lightbox -->
-  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Photo viewer">
-    <button class="lightbox__btn lightbox__close" aria-label="Close">
+  <div class="lightbox" id="lightbox" aria-hidden="true" inert role="dialog" aria-label="Photo viewer">
+    <button type="button" class="lightbox__btn lightbox__close" aria-label="Close">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
     </button>
-    <button class="lightbox__btn lightbox__prev" aria-label="Previous">
+    <button type="button" class="lightbox__btn lightbox__prev" aria-label="Previous">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
     </button>
-    <button class="lightbox__btn lightbox__next" aria-label="Next">
+    <button type="button" class="lightbox__btn lightbox__next" aria-label="Next">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
     </button>
-    <img class="lightbox__img" src="" alt="" />
+    <img class="lightbox__img" src="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==" alt="" />
     <div class="lightbox__counter"></div>
   </div>
 
