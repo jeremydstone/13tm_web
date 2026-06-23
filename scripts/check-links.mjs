@@ -30,9 +30,7 @@ const isExternal = (u) =>
 
 // Intentionally-pending assets the band will supply later. These are
 // allowed to be absent without failing the check.
-const IGNORE = new Set([
-  "assets/hero.mp4" // SHOWS header background video — drop in when ready
-]);
+const IGNORE = new Set([]);
 
 let broken = 0;
 let checked = 0;

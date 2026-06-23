@@ -199,11 +199,13 @@ h1, h2, h3, h4 {
 .nav-left { display: flex; align-items: center; gap: 22px; }
 
 /* ------------------------------ Heroes ------------------------------ */
-/* SHOWS full-bleed video hero */
+/* SHOWS video hero — sized so the "Shows" section peeks below it,
+   cueing the visitor to scroll. ~2/3 viewport on laptop, ~1/2 on mobile. */
 .hero {
+  /* --hero-pos = vertical object-position; lower % crops more off the top (~100px on desktop) */
+  --hero-pos: 34%;
   position: relative;
-  height: 100svh;
-  min-height: 560px;
+  height: clamp(360px, 64svh, 660px);
   width: 100%;
   overflow: hidden;
   display: flex;
@@ -220,6 +222,7 @@ h1, h2, h3, h4 {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: 50% var(--hero-pos);
 }
 .hero__media::after {
   /* darken + bottom gradient for logo legibility */
@@ -263,6 +266,12 @@ h1, h2, h3, h4 {
   40% { transform: scaleY(1); transform-origin: top; }
   60% { transform: scaleY(1); transform-origin: bottom; }
   100% { transform: scaleY(0); transform-origin: bottom; }
+}
+@media (max-width: 760px) {
+  .hero {
+    height: clamp(300px, 50svh, 460px);
+    --hero-pos: 36%; /* slightly less top crop on mobile */
+  }
 }
 
 /* Inner-page hero (PICS / VIDEOS / CONTACT) */
