@@ -205,7 +205,10 @@ h1, h2, h3, h4 {
   /* --hero-pos = vertical object-position; lower % crops more off the top (~100px on desktop) */
   --hero-pos: 34%;
   position: relative;
-  height: clamp(360px, 64svh, 660px);
+  /* Scale with overall screen size: mostly viewport height, plus a little
+     width so a wider external monitor grows the hero too (matching the live
+     site, which expands when the window gets larger). */
+  height: clamp(400px, calc(58vh + 7vw), 800px);
   width: 100%;
   overflow: hidden;
   display: flex;
