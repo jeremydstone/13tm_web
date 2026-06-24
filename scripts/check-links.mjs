@@ -46,9 +46,14 @@ for (const file of files) {
     // strip query string / hash fragment
     ref = ref.split(/[?#]/)[0];
     if (!ref || IGNORE.has(ref)) continue;
-    const target = ref.startsWith("/")
+    let target = ref.startsWith("/")
       ? join(ROOT, ref)
       : normalize(join(base, ref));
+    // Clean URLs: "/" or any directory path resolves to its index.html
+    // (how GitHub Pages / a static server serves /pics/, /contact/, etc.).
+    if (ref.endsWith("/") || (existsSync(target) && statSync(target).isDirectory())) {
+      target = join(target, "index.html");
+    }
     checked++;
     if (!existsSync(target)) {
       broken++;

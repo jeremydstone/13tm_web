@@ -6,14 +6,20 @@ step. Designed to be hosted free on **GitHub Pages** at the custom domain
 
 ## Pages
 
-| File           | Page    | Notes |
-|----------------|---------|-------|
-| `index.html`   | SHOWS   | Full-screen muted background video hero + logo, upcoming shows, past shows by year |
-| `pics.html`    | PICS    | Dynamic justified photo gallery + lightbox |
-| `videos.html`  | VIDEOS  | Two responsive Vimeo reels |
-| `contact.html` | CONTACT | Booking form (Web3Forms) |
+| File                  | URL         | Page    | Notes |
+|-----------------------|-------------|---------|-------|
+| `index.html`          | `/`         | SHOWS   | Muted background video hero + logo, upcoming shows, past shows by year |
+| `pics/index.html`     | `/pics/`    | PICS    | Masonry photo gallery + lightbox |
+| `videos/index.html`   | `/videos/`  | VIDEOS  | Two responsive Vimeo reels |
+| `contact/index.html`  | `/contact/` | CONTACT | Booking form (Web3Forms) |
 
 Nav order site-wide: **SHOWS · PICS · VIDEOS · CONTACT**.
+
+**Clean URLs:** each page (except the root) lives in its own folder as `index.html`, so it's
+served at an extension-less path like `/contact/` (a request to `/contact` redirects to it).
+All asset/nav links are **root-absolute** (`/css/styles.css`, `/pics/`, …) so they resolve
+the same from any page — which means the site must be served from the domain root (it is, via
+the custom domain / `CNAME`).
 
 ## Run locally
 
@@ -21,10 +27,11 @@ It's just static files, so any static server works:
 
 ```bash
 python3 -m http.server 8000
-# then open http://localhost:8000
+# then open http://localhost:8000  (and /pics/, /videos/, /contact/)
 ```
 
-(Opening the files via `file://` mostly works too, but a server is closer to production.)
+(Because links are root-absolute and pages use clean URLs, use the local server — opening via
+`file://` won't resolve the paths.)
 
 ## Tests / linting
 
@@ -107,7 +114,7 @@ You only manage **one set of hi-res images** — thumbnails are generated for yo
 - Until `photos.json` has entries, placeholder tiles are shown so the layout is visible.
 
 ### 5. Videos (VIDEOS)
-- In **`videos.html`**, replace `VIMEO_ID_1` and `VIMEO_ID_2` with the real Vimeo video IDs
+- In **`videos/index.html`**, replace `VIMEO_ID_1` and `VIMEO_ID_2` with the real Vimeo video IDs
   (the number in a Vimeo URL, e.g. `vimeo.com/`**`123456789`**). Reel #1 = Band Reel,
   Reel #2 = Festival Reel.
 
@@ -115,7 +122,7 @@ You only manage **one set of hi-res images** — thumbnails are generated for yo
 The contact form uses **[Web3Forms](https://web3forms.com)** — free, no account/server needed.
 1. Go to web3forms.com, enter the email address you want inquiries delivered to, and copy
    the **Access Key** they email you.
-2. In **`contact.html`**, replace `YOUR_WEB3FORMS_ACCESS_KEY` with that key.
+2. In **`contact/index.html`**, replace `YOUR_WEB3FORMS_ACCESS_KEY` with that key.
 That's it — submissions get emailed to you. A honeypot field is already included for spam.
 (If you ever prefer a different provider, the form is a standard POST and easy to repoint.)
 

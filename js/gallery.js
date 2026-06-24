@@ -19,9 +19,9 @@
   var galleryEl = document.getElementById("gallery");
   if (!galleryEl) return;
 
-  var MANIFEST_URL = "assets/photos/photos.json";
-  var FULL_DIR = "assets/photos/full/";
-  var THUMB_DIR = "assets/photos/thumb/";
+  var MANIFEST_URL = "/assets/photos/photos.json";
+  var FULL_DIR = "/assets/photos/full/";
+  var THUMB_DIR = "/assets/photos/thumb/";
   var GAP = 14;
   var ALT = "Photo of 13 Til Midnight"; // single alt text for every image
 
