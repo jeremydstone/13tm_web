@@ -9,8 +9,10 @@
     "lint:css": "stylelint \"css/**/*.css\"",
     "lint:js": "eslint \"js/**/*.js\"",
     "check:links": "node scripts/check-links.mjs",
+    "check:photos": "node scripts/check-photos.mjs",
+    "thumbs": "node scripts/gen-thumbs.mjs",
     "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
-    "test": "npm run lint && npm run check:links"
+    "test": "npm run lint && npm run check:links && npm run check:photos"
   },
   "devDependencies": {
     "eslint": "^9.16.0",
