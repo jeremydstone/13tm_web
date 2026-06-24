@@ -170,7 +170,7 @@ h1, h2, h3, h4 {
   border-color: var(--border-strong);
   background: var(--surface-2);
 }
-.socials svg { width: 18px; height: 18px; }
+.socials svg { width: 27px; height: 27px; }
 
 /* Mobile menu toggle */
 .menu-toggle {
@@ -240,35 +240,8 @@ h1, h2, h3, h4 {
   z-index: 2;
   width: min(560px, 76vw);
   margin-bottom: clamp(48px, 9vh, 110px);
-  filter: drop-shadow(0 6px 30px rgba(59, 158, 255, 0.40)) drop-shadow(0 0 50px rgba(108, 198, 255, 0.25));
-}
-.scroll-cue {
-  position: absolute;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 2;
-  color: var(--muted);
-  font-size: 0.7rem;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-}
-.scroll-cue::after {
-  content: "";
-  width: 1px;
-  height: 34px;
-  background: linear-gradient(var(--muted), transparent);
-  animation: cue 2.2s var(--ease) infinite;
-}
-@keyframes cue {
-  0% { transform: scaleY(0); transform-origin: top; }
-  40% { transform: scaleY(1); transform-origin: top; }
-  60% { transform: scaleY(1); transform-origin: bottom; }
-  100% { transform: scaleY(0); transform-origin: bottom; }
+  /* Neutral shadow for legibility over the video (the logo carries its own glow). */
+  filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.55));
 }
 @media (max-width: 760px) {
   .hero {
