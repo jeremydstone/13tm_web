@@ -5,7 +5,7 @@
   "description": "Static website for the band 13 Til Midnight",
   "type": "module",
   "scripts": {
-    "lint:html": "html-validate \"*.html\"",
+    "lint:html": "html-validate index.html pics/index.html videos/index.html contact/index.html",
     "lint:css": "stylelint \"css/**/*.css\"",
     "lint:js": "eslint \"js/**/*.js\"",
     "check:links": "node scripts/check-links.mjs",
