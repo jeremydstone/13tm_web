@@ -1,0 +1,42 @@
+{
+  "shows": [
+    { "date": "2026-07-18", "title": "Covington Days Festival", "subtitle": "12:00 PM • All ages", "button": { "url": "https://www.covingtonwa.gov/covingtondays/", "text": "Info & Details" } },
+    { "date": "2026-07-25", "title": "Silverdale Whaling Days", "subtitle": "8:30 PM • All ages", "button": { "url": "https://whalingdays.com/entertainment/", "text": "Info & Details" } },
+    { "date": "2026-07-26", "title": "Renton River Days", "subtitle": "4:00 PM • All ages", "button": { "url": "https://www.rentonwa.gov/Government/Newsroom/Press-Releases/Renton-River-Days-announces-2026-festival-dates", "text": "Info & Details" } },
+    { "date": "2026-07-29", "title": "Duvall SummerStage", "subtitle": "7:00 PM • All ages", "button": { "url": "https://www.duvallwa.gov/492/SummerStage", "text": "Info & Details" } },
+    { "date": "2026-07-30", "title": "Maple Valley Concerts in the Park", "subtitle": "6:00 PM • All ages", "button": { "url": "https://www.maplevalleywa.gov/government/departments/parks_and_recreation/special_events/music_in_the_park_concert_series.php", "text": "Info & Details" } },
+    { "date": "2026-08-06", "title": "Longview Summer Concerts at the Lake", "subtitle": "6:00 PM • All ages", "button": { "url": "https://www.mylongview.com/740/Summer-Concerts-at-the-Lake", "text": "Info & Details" } },
+    { "date": "2026-08-07", "title": "Lacey Summer Concerts", "subtitle": "7:00 PM • All ages", "button": { "url": "https://laceyparks.org/events/", "text": "Info & Details" } },
+    { "date": "2026-08-09", "title": "Festival at Mt Si", "subtitle": "12:00 PM • All ages", "button": { "url": "https://www.festivalatmtsi.org/schedule.php", "text": "Info & Details" } },
+    { "date": "2026-08-20", "title": "Clallam County Fair", "subtitle": "7:30 PM • All ages", "button": { "url": "https://www.clallamcountywa.gov/403/2026-Fair-Entertainment-Events", "text": "Info & Details" } },
+    { "date": "2026-09-19", "title": "Newcastle Days", "subtitle": "5:30 PM • All ages" },
+
+    { "date": "2026-05-09", "title": "The Royal Room — Seattle, WA (2 shows)" },
+    { "date": "2026-04-11", "title": "Green River College — Auburn, WA" },
+    { "date": "2026-03-07", "title": "Jazzbones — Tacoma, WA" },
+    { "date": "2026-03-06", "title": "McMenamins Anderson School — Bothell, WA" },
+    { "date": "2026-02-07", "title": "The Headliners Club — Lake Oswego, OR (2 shows)" },
+    { "date": "2026-01-31", "title": "Clearwater Casino — Suquamish, WA" },
+    { "date": "2026-01-24", "title": "Chalet Theatre — Enumclaw, WA" },
+
+    { "date": "2025-12-23", "title": "Nectar Lounge — Seattle, WA" },
+    { "date": "2025-12-13", "title": "Orcas Center — Orcas Island, WA" },
+    { "date": "2025-10-25", "title": "Clearwater Casino — Suquamish, WA" },
+    { "date": "2025-10-24", "title": "Tony V's Garage — Everett, WA" },
+    { "date": "2025-09-13", "title": "Hidden Hall — Seattle, WA" },
+    { "date": "2025-08-24", "title": "Spanish Ballroom — Tacoma, WA" },
+    { "date": "2025-08-22", "title": "McMenamins Anderson School — Bothell, WA" },
+    { "date": "2025-07-30", "title": "Duvall SummerStage — Duvall, WA" },
+    { "date": "2025-07-17", "title": "Munch & Music Festival — Bend, OR" },
+    { "date": "2025-03-29", "title": "Tim Noah Thumbnail Theater — Snohomish, WA" },
+    { "date": "2025-03-28", "title": "McMenamins Anderson School — Bothell, WA" },
+    { "date": "2025-02-08", "title": "Tractor Tavern — Seattle, WA" },
+    { "date": "2025-02-01", "title": "Clearwater Casino — Suquamish, WA" },
+    { "date": "2025-01-25", "title": "Chalet Theatre — Enumclaw, WA" },
+    { "date": "2025-01-12", "title": "The Royal Room — Seattle, WA (2 shows)" },
+
+    { "date": "2024-12-12", "title": "Neumos — Seattle, WA" },
+    { "date": "2024-11-09", "title": "Central Saloon — Seattle, WA" },
+    { "date": "2024-10-11", "title": "High Dive — Seattle, WA" }
+  ]
+}

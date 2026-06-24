@@ -412,15 +412,7 @@ h1, h2, h3, h4 {
   font-size: 0.95rem;
   margin-top: 4px;
 }
-.show__meta .dot { color: var(--muted-2); padding-inline: 8px; }
 .show__cta { display: flex; justify-content: flex-end; }
-.show__soon {
-  font-family: var(--font-display);
-  font-size: 0.8rem;
-  letter-spacing: 0.08em;
-  color: var(--muted-2);
-  text-transform: uppercase;
-}
 
 /* ------------------------------ SHOWS — past ------------------------------ */
 .past-year { margin-bottom: clamp(28px, 5vh, 48px); }
