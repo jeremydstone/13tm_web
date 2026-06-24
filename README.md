@@ -44,6 +44,7 @@ Individual checks:
 | `npm run lint:css`  | Lints the CSS (`stylelint`) — invalid values, unknown properties, duplicates |
 | `npm run lint:js`   | Lints the JS (`eslint`) — undefined vars, likely bugs |
 | `npm run check:links` | Verifies every local `href`/`src` in the HTML points at a file that exists |
+| `npm run check:photos` | Validates `assets/photos/photos.json` — valid JSON, every referenced full + thumb image exists (case-sensitively, like GitHub Pages), no duplicates, sane field types; warns about unlisted images |
 | `npm test` | All of the above |
 
 **Always run `npm test` before opening a PR.** The same suite runs automatically in CI
@@ -66,9 +67,9 @@ Everything below is wired up with placeholders. Here's exactly what to replace.
   shows on slow connections and before the video starts.
 
 ### 2. Logo
-- Replace **`assets/logo.svg`** with the real logo (SVG preferred; a transparent PNG also
-  works — just update the `src` in `index.html`). It's shown centered at the bottom of the
-  video hero.
+- The real logo lives at **`assets/logo.png`** (transparent, shown centered at the bottom of
+  the video hero). Replace that file to update it; if you switch formats, update the `src` in
+  `index.html` and the `og:image` meta tag.
 
 ### 3. Social links
 - Currently set to `https://facebook.com/13tilmidnight` and
@@ -76,23 +77,33 @@ Everything below is wired up with placeholders. Here's exactly what to replace.
   real URLs differ.
 
 ### 4. Photos (PICS)
-- Drop image files in **`assets/photos/`**.
-- Open **`js/gallery.js`** and fill in the `PHOTOS` array, e.g.:
-  ```js
-  var PHOTOS = [
-    { src: "assets/photos/01.jpg", alt: "13 Til Midnight live" },
-    { src: "assets/photos/02.jpg", alt: "Festival crowd" },
-    // …about 30
-  ];
-  ```
-- The grid layout is **calculated automatically** from each image's real dimensions, so any
-  mix of portrait + landscape just works — you never edit HTML/CSS to reflow.
-- **Hi/low-res:** if you provide two sizes, use `thumb` for the grid and `src` for the
-  full-size lightbox image:
-  ```js
-  { src: "assets/photos/full/01.jpg", thumb: "assets/photos/thumb/01.jpg", alt: "…" }
-  ```
-- While `PHOTOS` is empty, 30 generated placeholders are shown so you can see the layout.
+You only manage **one set of hi-res images** — thumbnails are generated for you.
+
+1. Drop your hi-res originals into **`assets/photos/full/`**. Use descriptive, stable
+   filenames (e.g. `royal-room-trio.jpg`) — **not** sequential numbers. Display order is
+   controlled by the manifest, not the filename, so reordering never means renaming.
+2. Run **`npm run thumbs`** (requires macOS `sips`, which is built in). This:
+   - generates optimized thumbnails into `assets/photos/thumb/` (max 1200px long edge), and
+   - updates **`assets/photos/photos.json`**, adding any new images (with an empty `credit`)
+     and recording each photo's dimensions — while preserving your existing credits and order.
+3. Edit **`assets/photos/photos.json`** to taste:
+   ```json
+   {
+     "photos": [
+       { "file": "royal-room-trio.jpg", "credit": "Photo by Jane Doe", "alt": "…", "w": 1200, "h": 800 },
+       { "file": "mt-si-2025.jpg", "credit": "", "alt": "", "w": 800, "h": 1200 }
+     ]
+   }
+   ```
+   - **`credit`** (optional) shows in a small font under that photo in the grid and in the lightbox.
+   - **`alt`** (optional) is the accessibility/description text.
+   - **Reorder** by moving entries in the array. **`w`/`h`** are maintained by `npm run thumbs`
+     (used for the masonry layout) — you don't need to touch them.
+- The gallery is a **masonry layout**: a responsive number of equal-width columns
+  (2 on mobile → 4 on desktop), so portrait and landscape photos both keep their natural
+  shape. Clicking a photo opens the hi-res version in a lightbox.
+- Commit both `assets/photos/full/` and `assets/photos/thumb/` (GitHub Pages serves them as-is).
+- Until `photos.json` has entries, placeholder tiles are shown so the layout is visible.
 
 ### 5. Videos (VIDEOS)
 - In **`videos.html`**, replace `VIMEO_ID_1` and `VIMEO_ID_2` with the real Vimeo video IDs

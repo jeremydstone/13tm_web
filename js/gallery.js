@@ -1,168 +1,158 @@
 /* ============================================================
-   PICS — dynamic justified gallery + lightbox.
+   PICS — masonry gallery + lightbox, driven by a JSON manifest.
 
-   HOW TO UPDATE PHOTOS:
-   Just edit the PHOTOS array below (filename + alt text). Layout is
-   computed automatically from each image's real dimensions, so any mix
-   of portrait/landscape works and you never touch HTML/CSS to reflow.
+   HOW TO ADD/UPDATE PHOTOS:
+   1. Drop hi-res images into  assets/photos/full/
+   2. Run  npm run thumbs       (generates assets/photos/thumb/ and
+      updates assets/photos/photos.json with each photo + dimensions)
+   3. Edit assets/photos/photos.json to set an optional "credit" (shown in
+      the lightbox only) and "alt" per photo, and reorder entries to change
+      display order. Order is the array order — never depends on filenames.
 
-   For now PHOTOS is empty, so we generate ~30 placeholders with varied
-   aspect ratios. Replace the placeholder block with real entries like:
-     { src: "assets/photos/band-01.jpg", alt: "13 Til Midnight live" }
-   Providing both a full-res and a smaller (thumb) version is supported:
-     { src: "assets/photos/full/01.jpg", thumb: "assets/photos/thumb/01.jpg", alt: "..." }
+   Until photos.json has entries, a set of placeholders is shown so the
+   layout is visible during development.
    ============================================================ */
 (function () {
   "use strict";
 
-  var PHOTOS = [
-    // { src: "assets/photos/01.jpg", thumb: "assets/photos/thumb/01.jpg", alt: "13 Til Midnight" },
-  ];
+  var galleryEl = document.getElementById("gallery");
+  if (!galleryEl) return;
 
-  /* ---------- Placeholder generation (remove once real photos added) ---------- */
+  var MANIFEST_URL = "assets/photos/photos.json";
+  var FULL_DIR = "assets/photos/full/";
+  var THUMB_DIR = "assets/photos/thumb/";
+  var GAP = 14;
+
+  var photos = [];   // normalized: { thumb, full, alt, credit, w, h, _el }
+  var current = 0;
+
+  /* ---------- Placeholder generation (used until real photos exist) ---------- */
   function makePlaceholders() {
-    var ratios = [
-      [3, 2], [2, 3], [4, 3], [16, 9], [1, 1], [3, 4], [5, 4], [9, 16], [2, 3], [3, 2]
-    ];
+    var ratios = [[3, 2], [2, 3], [4, 3], [1, 1], [3, 4], [16, 9], [5, 4], [9, 16]];
     var hues = [330, 268, 205, 190, 312, 230];
     var out = [];
-    for (var i = 0; i < 30; i++) {
+    for (var i = 0; i < 18; i++) {
       var r = ratios[i % ratios.length];
-      var w = r[0] * 220;
-      var h = r[1] * 220;
-      var hue = hues[i % hues.length];
+      var w = r[0] * 240, h = r[1] * 240, hue = hues[i % hues.length];
       var svg =
         '<svg xmlns="http://www.w3.org/2000/svg" width="' + w + '" height="' + h + '">' +
           '<defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1">' +
             '<stop offset="0" stop-color="hsl(' + hue + ',45%,16%)"/>' +
             '<stop offset="1" stop-color="hsl(' + ((hue + 40) % 360) + ',55%,9%)"/>' +
-          '</linearGradient></defs>' +
-          '<rect width="100%" height="100%" fill="url(#g)"/>' +
-          '<text x="50%" y="50%" fill="hsla(' + hue + ',60%,80%,0.55)" font-family="Space Grotesk, sans-serif" ' +
+          '</linearGradient></defs><rect width="100%" height="100%" fill="url(#g)"/>' +
+          '<text x="50%" y="50%" fill="hsla(' + hue + ',60%,80%,0.55)" font-family="Inter,sans-serif" ' +
             'font-size="' + Math.round(Math.min(w, h) * 0.18) + '" font-weight="700" text-anchor="middle" ' +
-            'dominant-baseline="central">' + (i + 1) + '</text>' +
-        '</svg>';
+            'dominant-baseline="central">' + (i + 1) + '</text></svg>';
+      var uri = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
       out.push({
-        src: "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg),
+        thumb: uri, full: uri, w: w, h: h,
         alt: "Photo placeholder " + (i + 1),
-        w: w,
-        h: h
+        credit: i % 4 === 0 ? "Photo by Sample Credit" : ""
       });
     }
     return out;
   }
 
-  var photos = PHOTOS.length ? PHOTOS : makePlaceholders();
+  function normalize(list) {
+    return list.map(function (p) {
+      return {
+        thumb: THUMB_DIR + p.file,
+        full: FULL_DIR + p.file,
+        alt: p.alt || "13 Til Midnight",
+        credit: p.credit || "",
+        w: p.w || 0,
+        h: p.h || 0
+      };
+    });
+  }
 
-  var galleryEl = document.getElementById("gallery");
-  if (!galleryEl) return;
+  /* ---------- Build item DOM once; layout() re-parents into columns ---------- */
+  function buildItems() {
+    photos.forEach(function (p, i) {
+      var fig = document.createElement("figure");
+      fig.className = "gallery__item";
+      fig.setAttribute("data-index", i);
 
-  var TARGET_ROW_H = 300;   // desired row height (desktop)
-  var GAP = 12;
+      var media = document.createElement("span");
+      media.className = "gallery__media";
 
-  var items = []; // { el, img, ar }
+      var img = document.createElement("img");
+      img.alt = p.alt;
+      img.loading = "lazy";
+      img.decoding = "async";
+      img.src = p.thumb;
+      media.appendChild(img);
+      fig.appendChild(media);
 
-  /* ---------- Build DOM ---------- */
-  photos.forEach(function (p, i) {
-    var fig = document.createElement("figure");
-    fig.className = "gallery__item";
-    fig.setAttribute("data-index", i);
+      // Credit is shown in the lightbox only (not in the grid).
+      p._el = fig;
 
-    var img = document.createElement("img");
-    img.alt = p.alt || "13 Til Midnight";
-    img.loading = "lazy";
-    img.decoding = "async";
-    img.src = p.thumb || p.src;
-
-    fig.appendChild(img);
-    galleryEl.appendChild(fig);
-
-    var rec = { el: fig, img: img, ar: p.w && p.h ? p.w / p.h : null, full: p.src };
-    items.push(rec);
-
-    // Measure natural aspect ratio if not supplied
-    if (!rec.ar) {
-      if (img.complete && img.naturalWidth) {
-        rec.ar = img.naturalWidth / img.naturalHeight;
-        layout();
-      } else {
-        img.addEventListener("load", function () {
-          rec.ar = img.naturalWidth / img.naturalHeight;
-          layout();
-        });
+      // If dimensions are unknown (e.g. hand-added without running thumbs),
+      // measure on load and re-layout.
+      if (!p.w || !p.h) {
+        if (img.complete && img.naturalWidth) {
+          p.w = img.naturalWidth; p.h = img.naturalHeight;
+        } else {
+          img.addEventListener("load", function () {
+            p.w = img.naturalWidth; p.h = img.naturalHeight; scheduleLayout();
+          });
+        }
       }
-    }
-  });
+    });
+  }
 
-  /* ---------- Justified-rows layout ---------- */
-  function targetRowHeight() {
-    var w = galleryEl.clientWidth;
-    if (w < 520) return 180;
-    if (w < 820) return 230;
-    return TARGET_ROW_H;
+  function colCount(w) {
+    if (w < 540) return 2;
+    if (w < 880) return 3;
+    return 4;
   }
 
   function layout() {
-    var containerW = galleryEl.clientWidth;
-    if (!containerW) return;
-    var rowH = targetRowHeight();
-    var ready = items.filter(function (it) { return it.ar; });
-    if (!ready.length) return;
+    var W = galleryEl.clientWidth;
+    if (!W || !photos.length) return;
+    var cols = colCount(W);
+    var colW = (W - GAP * (cols - 1)) / cols;
 
-    var row = [];
-    var rowARsum = 0;
-
-    function flush(isLast) {
-      if (!row.length) return;
-      // width available for images in this row (minus gaps)
-      var avail = containerW - GAP * (row.length - 1);
-      var h = avail / rowARsum;
-      if (isLast) h = Math.min(h, rowH * 1.18); // don't over-stretch a lonely last row
-      row.forEach(function (it) {
-        var wv = h * it.ar;
-        it.el.style.width = wv + "px";
-        it.el.style.height = h + "px";
-        it.el.style.flex = "0 0 auto";
-      });
+    galleryEl.textContent = "";
+    var colEls = [], colH = [];
+    for (var c = 0; c < cols; c++) {
+      var col = document.createElement("div");
+      col.className = "gallery__col";
+      galleryEl.appendChild(col);
+      colEls.push(col);
+      colH.push(0);
     }
 
-    ready.forEach(function (it, idx) {
-      row.push(it);
-      rowARsum += it.ar;
-      var projectedH = (containerW - GAP * (row.length - 1)) / rowARsum;
-      if (projectedH <= rowH) {
-        flush(false);
-        row = [];
-        rowARsum = 0;
-      } else if (idx === ready.length - 1) {
-        flush(true);
-      }
+    photos.forEach(function (p) {
+      var ar = (p.w && p.h) ? p.w / p.h : 1.5;
+      var estH = colW / ar + GAP;
+      var idx = 0;
+      for (var c = 1; c < cols; c++) if (colH[c] < colH[idx]) idx = c;
+      colEls[idx].appendChild(p._el);
+      colH[idx] += estH;
     });
   }
 
-  var rAF;
-  window.addEventListener("resize", function () {
-    cancelAnimationFrame(rAF);
-    rAF = requestAnimationFrame(layout);
-  });
-
-  // initial + reveal
-  layout();
-  window.addEventListener("load", layout);
-  if (window.__revealObserve) {
-    items.forEach(function (it, i) {
-      it.el.setAttribute("data-reveal", "scale");
-      it.el.style.setProperty("--reveal-delay", (Math.min(i, 12) * 35) + "ms");
-    });
-    window.__revealObserve(items.map(function (it) { return it.el; }));
+  var raf;
+  function scheduleLayout() {
+    cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(layout);
   }
+  window.addEventListener("resize", scheduleLayout);
 
   /* ---------- Lightbox ---------- */
   var lb = document.getElementById("lightbox");
-  var lbImg = lb ? lb.querySelector(".lightbox__img") : null;
-  var lbCounter = lb ? lb.querySelector(".lightbox__counter") : null;
-  var current = 0;
+  var lbImg = lb && lb.querySelector(".lightbox__img");
+  var lbCredit = lb && lb.querySelector(".lightbox__credit");
+  var lbCounter = lb && lb.querySelector(".lightbox__counter");
 
+  function showCurrent() {
+    var p = photos[current];
+    lbImg.src = p.full;
+    lbImg.alt = p.alt;
+    if (lbCredit) lbCredit.textContent = p.credit || "";
+    if (lbCounter) lbCounter.textContent = (current + 1) + " / " + photos.length;
+  }
   function openLightbox(i) {
     current = i;
     showCurrent();
@@ -177,18 +167,13 @@
     lb.setAttribute("aria-hidden", "true");
     document.body.style.overflow = "";
   }
-  function showCurrent() {
-    var p = photos[current];
-    lbImg.src = p.src;
-    lbImg.alt = p.alt || "13 Til Midnight";
-    if (lbCounter) lbCounter.textContent = (current + 1) + " / " + photos.length;
-  }
   function step(dir) {
     current = (current + dir + photos.length) % photos.length;
     showCurrent();
   }
 
-  if (lb && lbImg) {
+  function wireLightbox() {
+    if (!lb || !lbImg) return;
     galleryEl.addEventListener("click", function (e) {
       var fig = e.target.closest(".gallery__item");
       if (fig) openLightbox(+fig.getAttribute("data-index"));
@@ -196,9 +181,7 @@
     lb.querySelector(".lightbox__close").addEventListener("click", closeLightbox);
     lb.querySelector(".lightbox__prev").addEventListener("click", function () { step(-1); });
     lb.querySelector(".lightbox__next").addEventListener("click", function () { step(1); });
-    lb.addEventListener("click", function (e) {
-      if (e.target === lb) closeLightbox();
-    });
+    lb.addEventListener("click", function (e) { if (e.target === lb) closeLightbox(); });
     document.addEventListener("keydown", function (e) {
       if (!lb.classList.contains("is-open")) return;
       if (e.key === "Escape") closeLightbox();
@@ -206,4 +189,24 @@
       else if (e.key === "ArrowLeft") step(-1);
     });
   }
+
+  /* ---------- Boot ---------- */
+  function start(list) {
+    photos = list;
+    buildItems();
+    layout();
+    window.addEventListener("load", scheduleLayout);
+    wireLightbox();
+  }
+
+  fetch(MANIFEST_URL, { cache: "no-cache" })
+    .then(function (r) { return r.ok ? r.json() : null; })
+    .then(function (data) {
+      var list = data && Array.isArray(data.photos) ? data.photos : [];
+      start(list.length ? normalize(list) : makePlaceholders());
+    })
+    .catch(function () {
+      // e.g. opened via file:// — fall back to placeholders
+      start(makePlaceholders());
+    });
 })();
