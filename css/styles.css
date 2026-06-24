@@ -367,12 +367,9 @@ h1, h2, h3, h4 {
   border: 1px solid var(--border);
   border-radius: 16px;
   background: linear-gradient(180deg, var(--surface), transparent);
-  transition: transform 0.3s var(--ease), border-color 0.3s var(--ease), background 0.3s var(--ease);
-}
-.show:hover {
-  transform: translateY(-3px);
-  border-color: var(--border-strong);
-  background: linear-gradient(180deg, var(--surface-2), transparent);
+  /* No hover effect on the card itself: it isn't interactive, and any
+     hover style here caused scroll jank as cards crossed the cursor.
+     The button inside keeps its own hover. */
 }
 .show__date {
   text-align: center;
