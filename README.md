@@ -52,6 +52,7 @@ Individual checks:
 | `npm run lint:js`   | Lints the JS (`eslint`) — undefined vars, likely bugs |
 | `npm run check:links` | Verifies every local `href`/`src` in the HTML points at a file that exists |
 | `npm run check:photos` | Validates `assets/photos/photos.json` — valid JSON, every referenced full + thumb image exists (case-sensitively, like GitHub Pages), no duplicates, sane field types; warns about unlisted images |
+| `npm run check:shows` | Validates `data/shows.json` — valid JSON, real `YYYY-MM-DD` dates, non-empty titles, well-formed buttons |
 | `npm test` | All of the above |
 
 **Always run `npm test` before opening a PR.** The same suite runs automatically in CI
@@ -60,6 +61,38 @@ red build blocks the merge. Known intentionally-pending assets (e.g. `assets/her
 allow-listed in `scripts/check-links.mjs` so they don't fail the link check.
 
 ---
+
+## Updating shows (the most common edit)
+
+All shows — upcoming **and** past — live in one file: **`data/shows.json`**. The site sorts
+them and decides which are upcoming vs. past **based on today's date**, so a show moves itself
+from "Upcoming Shows" to "Past Shows" automatically once its date passes. **You only ever add
+upcoming shows; you never have to move anything to the past list.**
+
+Each entry:
+
+```json
+{
+  "date": "2026-07-18",
+  "title": "Covington Days Festival",
+  "subtitle": "12:00 PM • All ages",
+  "button": { "url": "https://example.com/info", "text": "Info & Details" }
+}
+```
+
+- **`date`** — `YYYY-MM-DD`. Required. Drives the upcoming/past split and all the date labels.
+- **`title`** — Required. Shown as the big heading on an upcoming card, and as the whole line
+  in the past-shows list (e.g. `"The Royal Room — Seattle, WA (2 shows)"`). Put whatever you
+  want to read in both places here.
+- **`subtitle`** — Optional. Extra line on upcoming cards (time, age policy, …). Hidden once
+  the show is in the past.
+- **`button`** — Optional. A link button on upcoming cards: `url` + the `text` to show on it
+  (e.g. `"Tickets"` or `"Info & Details"`). Omit it for no button. Hidden once the show is past.
+
+Order in the file doesn't matter — it's sorted automatically (upcoming soonest-first, past
+most-recent-first, grouped by year with new years appearing on their own). If there are no
+upcoming shows, the whole "Upcoming Shows" section disappears. Run `npm run check:shows` (part
+of `npm test`) to catch typos like an impossible date or a button missing its text.
 
 ## Dropping in the real content
 

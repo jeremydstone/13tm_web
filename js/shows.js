@@ -1,127 +1,145 @@
 /* ============================================================
-   SHOWS data + renderer.
-   To update shows: edit the arrays below. No HTML/layout changes
-   needed — the page rebuilds itself from this data.
+   SHOWS — data-driven, date-aware renderer.
+
+   Shows live in  /data/shows.json  (one flat list). This script:
+   - splits them into UPCOMING (date today or later) and PAST
+     (date already passed) based on the visitor's current date, so a
+     show moves itself from "Upcoming" to "Past" automatically once its
+     date passes — no site edit needed;
+   - sorts upcoming soonest-first and past most-recent-first, grouping
+     past shows by year (newest year first) — new years appear on their
+     own automatically;
+   - drops the "Upcoming Shows" section entirely when nothing is upcoming
+     (and the "Past Shows" section when nothing is past).
+
+   To update: edit /data/shows.json. Each show:
+     { "date": "YYYY-MM-DD",
+       "title": "...",                 // upcoming card heading AND past-list text
+       "subtitle": "7:00 PM • All ages",   // optional; shown on upcoming only
+       "button": { "url": "...", "text": "Tickets" } }  // optional; upcoming only
    ============================================================ */
 (function () {
   "use strict";
 
-  /* Each upcoming show:
-     { dow, mon, day, year, name, time, note, url, ticketLabel } */
-  var UPCOMING = [
-    { dow: "Sat", mon: "Jul", day: "18", year: "2026", name: "Covington Days Festival",          time: "12:00 PM", note: "All ages", url: "https://www.covingtonwa.gov/covingtondays/" },
-    { dow: "Sat", mon: "Jul", day: "25", year: "2026", name: "Silverdale Whaling Days",            time: "8:30 PM",  note: "All ages", url: "https://whalingdays.com/entertainment/" },
-    { dow: "Sun", mon: "Jul", day: "26", year: "2026", name: "Renton River Days",                  time: "4:00 PM",  note: "All ages", url: "https://www.rentonwa.gov/Government/Newsroom/Press-Releases/Renton-River-Days-announces-2026-festival-dates" },
-    { dow: "Wed", mon: "Jul", day: "29", year: "2026", name: "Duvall SummerStage",                 time: "7:00 PM",  note: "All ages", url: "https://www.duvallwa.gov/492/SummerStage" },
-    { dow: "Thu", mon: "Jul", day: "30", year: "2026", name: "Maple Valley Concerts in the Park",  time: "6:00 PM",  note: "All ages", url: "https://www.maplevalleywa.gov/government/departments/parks_and_recreation/special_events/music_in_the_park_concert_series.php" },
-    { dow: "Thu", mon: "Aug", day: "6",  year: "2026", name: "Longview Summer Concerts at the Lake", time: "6:00 PM", note: "All ages", url: "https://www.mylongview.com/740/Summer-Concerts-at-the-Lake" },
-    { dow: "Fri", mon: "Aug", day: "7",  year: "2026", name: "Lacey Summer Concerts",              time: "7:00 PM",  note: "All ages", url: "https://laceyparks.org/events/" },
-    { dow: "Sun", mon: "Aug", day: "9",  year: "2026", name: "Festival at Mt Si",                  time: "12:00 PM", note: "All ages", url: "https://www.festivalatmtsi.org/schedule.php" },
-    { dow: "Thu", mon: "Aug", day: "20", year: "2026", name: "Clallam County Fair",                time: "7:30 PM",  note: "All ages", url: "https://www.clallamcountywa.gov/403/2026-Fair-Entertainment-Events" },
-    { dow: "Sat", mon: "Sep", day: "19", year: "2026", name: "Newcastle Days",                     time: "5:30 PM",  note: "All ages", url: "" }
-  ];
+  var DATA_URL = "/data/shows.json";
+  var MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  var DOWS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 
-  /* Past shows, newest first within each year.
-     { date, venue }  — date is the short label, venue includes city. */
-  var PAST = [
-    {
-      year: "2026",
-      shows: [
-        { date: "Sat May 9",  venue: "The Royal Room — Seattle, WA (2 shows)" },
-        { date: "Sat Apr 11", venue: "Green River College — Auburn, WA" },
-        { date: "Sat Mar 7",  venue: "Jazzbones — Tacoma, WA" },
-        { date: "Fri Mar 6",  venue: "McMenamins Anderson School — Bothell, WA" },
-        { date: "Sat Feb 7",  venue: "The Headliners Club — Lake Oswego, OR (2 shows)" },
-        { date: "Sat Jan 31", venue: "Clearwater Casino — Suquamish, WA" },
-        { date: "Sat Jan 24", venue: "Chalet Theatre — Enumclaw, WA" }
-      ]
-    },
-    {
-      year: "2025",
-      shows: [
-        { date: "Tue Dec 23",  venue: "Nectar Lounge — Seattle, WA" },
-        { date: "Sat Dec 13",  venue: "Orcas Center — Orcas Island, WA" },
-        { date: "Sat Oct 25",  venue: "Clearwater Casino — Suquamish, WA" },
-        { date: "Fri Oct 24",  venue: "Tony V's Garage — Everett, WA" },
-        { date: "Sat Sep 13",  venue: "Hidden Hall — Seattle, WA" },
-        { date: "Sun Aug 24",  venue: "Spanish Ballroom — Tacoma, WA" },
-        { date: "Fri Aug 22",  venue: "McMenamins Anderson School — Bothell, WA" },
-        { date: "Wed Jul 30",  venue: "Duvall SummerStage — Duvall, WA" },
-        { date: "Thu Jul 17",  venue: "Munch & Music Festival — Bend, OR" },
-        { date: "Sat Mar 29",  venue: "Tim Noah Thumbnail Theater — Snohomish, WA" },
-        { date: "Fri Mar 28",  venue: "McMenamins Anderson School — Bothell, WA" },
-        { date: "Sat Feb 8",   venue: "Tractor Tavern — Seattle, WA" },
-        { date: "Sat Feb 1",   venue: "Clearwater Casino — Suquamish, WA" },
-        { date: "Sat Jan 25",  venue: "Chalet Theatre — Enumclaw, WA" },
-        { date: "Sun Jan 12",  venue: "The Royal Room — Seattle, WA (2 shows)" }
-      ]
-    },
-    {
-      year: "2024",
-      shows: [
-        { date: "Thu Dec 12", venue: "Neumos — Seattle, WA" },
-        { date: "Sat Nov 9",  venue: "Central Saloon — Seattle, WA" },
-        { date: "Fri Oct 11", venue: "High Dive — Seattle, WA" }
-      ]
-    }
-  ];
+  // Parse "YYYY-MM-DD" as a LOCAL date (avoid the UTC-shift of new Date(str)).
+  function parseDate(s) {
+    var p = String(s).split("-");
+    return new Date(+p[0], +p[1] - 1, +p[2]);
+  }
 
-  function el(tag, cls, html) {
+  function el(tag, cls, text) {
     var n = document.createElement(tag);
     if (cls) n.className = cls;
-    if (html != null) n.innerHTML = html;
+    if (text != null) n.textContent = text;
     return n;
   }
 
-  function renderUpcoming(container) {
-    UPCOMING.forEach(function (s, i) {
+  function removeSection(id) {
+    var s = document.getElementById(id);
+    if (s) s.remove();
+  }
+
+  function renderUpcoming(container, shows) {
+    shows.forEach(function (s) {
+      var d = s._date;
       var row = el("article", "show");
 
-      var meta = s.time || "";
-      if (s.note) meta += (meta ? '<span class="dot">•</span>' : "") + s.note;
+      var date = el("div", "show__date");
+      date.appendChild(el("span", "mon", MONTHS[d.getMonth()]));
+      date.appendChild(el("span", "day", String(d.getDate())));
+      date.appendChild(el("span", "dow", DOWS[d.getDay()]));
+      row.appendChild(date);
 
-      var cta = s.url
-        ? '<a class="btn btn--solid" href="' + s.url + '" target="_blank" rel="noopener">Info &amp; Details</a>'
-        : '<span class="show__soon">Details soon</span>';
+      var info = el("div", "show__info");
+      info.appendChild(el("h3", "show__name", s.title));
+      if (s.subtitle) info.appendChild(el("p", "show__meta", s.subtitle));
+      row.appendChild(info);
 
-      row.innerHTML =
-        '<div class="show__date">' +
-          '<span class="mon">' + s.mon + '</span>' +
-          '<span class="day">' + s.day + '</span>' +
-          '<span class="dow">' + s.dow + '</span>' +
-        '</div>' +
-        '<div class="show__info">' +
-          '<h3 class="show__name">' + s.name + '</h3>' +
-          '<p class="show__meta">' + meta + '</p>' +
-        '</div>' +
-        '<div class="show__cta">' + cta + '</div>';
+      if (s.button && s.button.url && s.button.text) {
+        var cta = el("div", "show__cta");
+        var a = el("a", "btn btn--solid", s.button.text);
+        a.href = s.button.url;
+        a.target = "_blank";
+        a.rel = "noopener";
+        cta.appendChild(a);
+        row.appendChild(cta);
+      }
 
       container.appendChild(row);
     });
   }
 
-  function renderPast(container) {
-    PAST.forEach(function (group) {
+  function renderPast(container, shows) {
+    var byYear = {};
+    shows.forEach(function (s) {
+      var y = s._date.getFullYear();
+      (byYear[y] = byYear[y] || []).push(s);
+    });
+    Object.keys(byYear).map(Number).sort(function (a, b) { return b - a; }).forEach(function (year) {
       var block = el("div", "past-year");
-      block.appendChild(el("h3", "past-year__label", group.year));
-
+      block.appendChild(el("h3", "past-year__label", String(year)));
       var caps = el("div", "capsules");
-      group.shows.forEach(function (s) {
-        caps.appendChild(el("span", "capsule",
-          '<span class="cap-date">' + s.date + '</span>' +
-          '<span class="cap-sep"></span>' +
-          '<span class="cap-venue">' + s.venue + '</span>'
-        ));
+      byYear[year].forEach(function (s) {
+        var d = s._date;
+        var cap = el("span", "capsule");
+        cap.appendChild(el("span", "cap-date", DOWS[d.getDay()] + " " + MONTHS[d.getMonth()] + " " + d.getDate()));
+        cap.appendChild(el("span", "cap-sep"));
+        cap.appendChild(el("span", "cap-venue", s.title));
+        caps.appendChild(cap);
       });
       block.appendChild(caps);
       container.appendChild(block);
     });
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
-    var up = document.getElementById("upcoming-list");
-    var past = document.getElementById("past-list");
-    if (up) renderUpcoming(up);
-    if (past) renderPast(past);
-  });
+  function render(list) {
+    var now = new Date();
+    var todayMid = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+
+    var upcoming = [], past = [];
+    list.forEach(function (s) {
+      if (!s || !s.date) return;
+      s._date = parseDate(s.date);
+      if (isNaN(s._date.getTime())) return;
+      if (s._date.getTime() >= todayMid) upcoming.push(s);
+      else past.push(s);
+    });
+    upcoming.sort(function (a, b) { return a._date - b._date; }); // soonest first
+    past.sort(function (a, b) { return b._date - a._date; });     // most recent first
+
+    if (upcoming.length) {
+      var ul = document.getElementById("upcoming-list");
+      if (ul) renderUpcoming(ul, upcoming);
+    } else {
+      removeSection("shows");
+    }
+
+    if (past.length) {
+      var pl = document.getElementById("past-list");
+      if (pl) renderPast(pl, past);
+    } else {
+      removeSection("past");
+    }
+  }
+
+  function init() {
+    fetch(DATA_URL, { cache: "no-cache" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        render(data && Array.isArray(data.shows) ? data.shows : []);
+      })
+      .catch(function () {
+        // Couldn't load the data (e.g. opened via file://). Remove the empty
+        // sections rather than leaving bare headings.
+        removeSection("shows");
+        removeSection("past");
+      });
+  }
+
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", init);
+  else init();
 })();

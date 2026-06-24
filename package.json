@@ -10,9 +10,10 @@
     "lint:js": "eslint \"js/**/*.js\"",
     "check:links": "node scripts/check-links.mjs",
     "check:photos": "node scripts/check-photos.mjs",
+    "check:shows": "node scripts/check-shows.mjs",
     "thumbs": "node scripts/gen-thumbs.mjs",
     "lint": "npm run lint:html && npm run lint:css && npm run lint:js",
-    "test": "npm run lint && npm run check:links && npm run check:photos"
+    "test": "npm run lint && npm run check:links && npm run check:photos && npm run check:shows"
   },
   "devDependencies": {
     "eslint": "^9.16.0",
