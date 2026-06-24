@@ -90,15 +90,16 @@ You only manage **one set of hi-res images** — thumbnails are generated for yo
    ```json
    {
      "photos": [
-       { "file": "royal-room-trio.jpg", "credit": "Photo by Jane Doe", "alt": "…", "w": 1200, "h": 800 },
-       { "file": "mt-si-2025.jpg", "credit": "", "alt": "", "w": 800, "h": 1200 }
+       { "file": "royal-room-trio.jpg", "credit": "Photo by Jane Doe", "w": 1200, "h": 800 },
+       { "file": "mt-si-2025.jpg", "credit": "", "w": 800, "h": 1200 }
      ]
    }
    ```
-   - **`credit`** (optional) shows in a small font under that photo in the grid and in the lightbox.
-   - **`alt`** (optional) is the accessibility/description text.
+   - **`credit`** (optional) shows in a small font under the photo in the lightbox (not in the grid).
    - **Reorder** by moving entries in the array. **`w`/`h`** are maintained by `npm run thumbs`
      (used for the masonry layout) — you don't need to touch them.
+   - Alt text is a single fixed value (`"Photo of 13 Til Midnight"`) applied to every image —
+     set in `js/gallery.js` (`ALT`), not per photo.
 - The gallery is a **masonry layout**: a responsive number of equal-width columns
   (2 on mobile → 4 on desktop), so portrait and landscape photos both keep their natural
   shape. Clicking a photo opens the hi-res version in a lightbox.

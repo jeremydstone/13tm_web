@@ -6,8 +6,9 @@
    2. Run  npm run thumbs       (generates assets/photos/thumb/ and
       updates assets/photos/photos.json with each photo + dimensions)
    3. Edit assets/photos/photos.json to set an optional "credit" (shown in
-      the lightbox only) and "alt" per photo, and reorder entries to change
-      display order. Order is the array order — never depends on filenames.
+      the lightbox only) and reorder entries to change display order. Order
+      is the array order — never depends on filenames. (Alt text is a single
+      fixed value for every image; see ALT below.)
 
    Until photos.json has entries, a set of placeholders is shown so the
    layout is visible during development.
@@ -22,8 +23,9 @@
   var FULL_DIR = "assets/photos/full/";
   var THUMB_DIR = "assets/photos/thumb/";
   var GAP = 14;
+  var ALT = "Photo of 13 Til Midnight"; // single alt text for every image
 
-  var photos = [];   // normalized: { thumb, full, alt, credit, w, h, _el }
+  var photos = [];   // normalized: { thumb, full, credit, w, h, _el }
   var current = 0;
 
   /* ---------- Placeholder generation (used until real photos exist) ---------- */
@@ -46,7 +48,6 @@
       var uri = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
       out.push({
         thumb: uri, full: uri, w: w, h: h,
-        alt: "Photo placeholder " + (i + 1),
         credit: i % 4 === 0 ? "Photo by Sample Credit" : ""
       });
     }
@@ -58,7 +59,6 @@
       return {
         thumb: THUMB_DIR + p.file,
         full: FULL_DIR + p.file,
-        alt: p.alt || "13 Til Midnight",
         credit: p.credit || "",
         w: p.w || 0,
         h: p.h || 0
@@ -77,7 +77,7 @@
       media.className = "gallery__media";
 
       var img = document.createElement("img");
-      img.alt = p.alt;
+      img.alt = ALT;
       img.loading = "lazy";
       img.decoding = "async";
       img.src = p.thumb;
@@ -149,7 +149,7 @@
   function showCurrent() {
     var p = photos[current];
     lbImg.src = p.full;
-    lbImg.alt = p.alt;
+    lbImg.alt = ALT;
     if (lbCredit) lbCredit.textContent = p.credit || "";
     if (lbCounter) lbCounter.textContent = (current + 1) + " / " + photos.length;
   }

@@ -90,7 +90,7 @@ for (const p of manifest.photos) {
 let added = 0;
 for (const file of sources) {
   if (!known.has(file)) {
-    manifest.photos.push({ file, credit: "", alt: "", w: dims[file].w, h: dims[file].h });
+    manifest.photos.push({ file, credit: "", w: dims[file].w, h: dims[file].h });
     added++;
   }
 }

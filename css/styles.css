@@ -21,6 +21,8 @@
   --accent: #6cc6ff;
   --accent-2: #1746c7;
   --accent-grad: linear-gradient(100deg, #1746c7 0%, #3b9eff 50%, #6cc6ff 100%);
+  /* Solid-button gradient — deeper so white text stays legible across it */
+  --btn-grad: linear-gradient(100deg, #3730a3 0%, #2563eb 100%);
 
   /* Headings and body both use Inter for now. Kept as separate variables so
      the heading face can be swapped later without touching every rule. */
@@ -332,16 +334,25 @@ h1, h2, h3, h4 {
   color: var(--fg);
   background: var(--surface);
   cursor: pointer;
-  transition: transform 0.2s var(--ease), background 0.25s var(--ease), border-color 0.25s var(--ease);
+  transition: transform 0.2s var(--ease), background 0.25s var(--ease),
+    border-color 0.25s var(--ease), outline-color 0.2s var(--ease);
 }
 .btn:hover { transform: translateY(-2px); background: var(--surface-2); border-color: var(--fg); }
 .btn--solid {
   border: 0;
-  color: #0a0a12;
-  background: var(--accent-grad);
+  color: #fff;
+  background: var(--btn-grad);
   font-weight: 600;
+  outline: 2px solid transparent;
+  outline-offset: 3px;
 }
-.btn--solid:hover { filter: brightness(1.08); }
+/* Hover: flatten the gradient to a brighter blue and ring it with a
+   light-blue outline (don't inherit .btn:hover's flat surface background). */
+.btn--solid:hover,
+.btn--solid:focus-visible {
+  background: #2f6fe6;
+  outline-color: var(--accent);
+}
 .btn svg { width: 15px; height: 15px; }
 
 /* ------------------------------ SHOWS — upcoming ------------------------------ */

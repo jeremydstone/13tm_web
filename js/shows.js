@@ -66,8 +66,6 @@
     }
   ];
 
-  var TICKET_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2 2 2 0 0 0 0 4 2 2 0 0 1-2 2H5a2 2 0 0 1-2-2 2 2 0 0 0 0-4z"/><path d="M13 5v2M13 17v2M13 11v2"/></svg>';
-
   function el(tag, cls, html) {
     var n = document.createElement(tag);
     if (cls) n.className = cls;
@@ -83,7 +81,7 @@
       if (s.note) meta += (meta ? '<span class="dot">•</span>' : "") + s.note;
 
       var cta = s.url
-        ? '<a class="btn btn--solid" href="' + s.url + '" target="_blank" rel="noopener">' + TICKET_SVG + ' Tickets &amp; Info</a>'
+        ? '<a class="btn btn--solid" href="' + s.url + '" target="_blank" rel="noopener">Info &amp; Details</a>'
         : '<span class="show__soon">Details soon</span>';
 
       row.innerHTML =
