@@ -261,6 +261,10 @@ h1, h2, h3, h4 {
   padding-bottom: clamp(28px, 6vh, 64px);
   overflow: hidden;
 }
+/* Gallery page: just the "GALLERY" label — sit it closer to the nav. */
+.page-hero--gallery {
+  padding-top: calc(var(--header-h) + clamp(16px, 4vh, 44px));
+}
 .page-hero::before {
   content: "";
   position: absolute;
