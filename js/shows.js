@@ -76,11 +76,8 @@
   }
 
   function renderUpcoming(container) {
-    var reveals = [];
     UPCOMING.forEach(function (s, i) {
       var row = el("article", "show");
-      row.setAttribute("data-reveal", "");
-      row.style.setProperty("--reveal-delay", (Math.min(i, 6) * 60) + "ms");
 
       var meta = s.time || "";
       if (s.note) meta += (meta ? '<span class="dot">•</span>' : "") + s.note;
@@ -102,16 +99,12 @@
         '<div class="show__cta">' + cta + '</div>';
 
       container.appendChild(row);
-      reveals.push(row);
     });
-    if (window.__revealObserve) window.__revealObserve(reveals);
   }
 
   function renderPast(container) {
-    var reveals = [];
     PAST.forEach(function (group) {
       var block = el("div", "past-year");
-      block.setAttribute("data-reveal", "");
       block.appendChild(el("h3", "past-year__label", group.year));
 
       var caps = el("div", "capsules");
@@ -124,9 +117,7 @@
       });
       block.appendChild(caps);
       container.appendChild(block);
-      reveals.push(block);
     });
-    if (window.__revealObserve) window.__revealObserve(reveals);
   }
 
   document.addEventListener("DOMContentLoaded", function () {

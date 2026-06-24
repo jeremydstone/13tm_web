@@ -22,7 +22,9 @@
   --accent-2: #1746c7;
   --accent-grad: linear-gradient(100deg, #1746c7 0%, #3b9eff 50%, #6cc6ff 100%);
 
-  --font-display: "Space Grotesk", system-ui, sans-serif;
+  /* Headings and body both use Inter for now. Kept as separate variables so
+     the heading face can be swapped later without touching every rule. */
+  --font-display: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   --font-body: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
 
   --maxw: 1180px;
@@ -125,7 +127,7 @@ h1, h2, h3, h4 {
   font-family: var(--font-display);
   font-weight: 500;
   font-size: 0.92rem;
-  letter-spacing: 0.14em;
+  letter-spacing: normal;
   text-transform: uppercase;
   color: var(--muted);
   position: relative;
@@ -163,12 +165,14 @@ h1, h2, h3, h4 {
   border: 1px solid var(--border);
   color: var(--fg);
   background: var(--surface);
-  transition: transform 0.25s var(--ease), border-color 0.25s var(--ease), background 0.25s var(--ease);
+  transition: border-color 0.25s var(--ease), background 0.25s var(--ease), box-shadow 0.25s var(--ease), color 0.25s var(--ease);
 }
-.socials a:hover {
-  transform: translateY(-2px);
-  border-color: var(--border-strong);
-  background: var(--surface-2);
+.socials a:hover,
+.socials a:focus-visible {
+  border-color: var(--accent);
+  background: rgba(59, 158, 255, 0.16);
+  color: #fff;
+  box-shadow: 0 0 0 1px rgba(59, 158, 255, 0.35), 0 0 18px rgba(59, 158, 255, 0.45);
 }
 .socials svg { width: 27px; height: 27px; }
 
@@ -289,6 +293,10 @@ h1, h2, h3, h4 {
 .section { padding-block: clamp(48px, 9vh, 110px); }
 .section--tight { padding-block: clamp(28px, 5vh, 56px); }
 
+/* SHOWS page: tighten the space above each section header to ~45px. */
+#shows { padding-top: 45px; padding-bottom: 0; }
+#past { padding-top: 45px; }
+
 .section-head {
   display: flex;
   align-items: baseline;
@@ -296,7 +304,7 @@ h1, h2, h3, h4 {
   margin-bottom: clamp(24px, 4vh, 44px);
 }
 .section-head h2 {
-  font-size: clamp(1.8rem, 4.5vw, 2.9rem);
+  font-size: clamp(1.44rem, 3.6vw, 2.32rem);
   font-weight: 700;
 }
 .section-head .rule {
