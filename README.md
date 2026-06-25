@@ -53,7 +53,8 @@ Individual checks:
 | `npm run lint:js`   | Lints the JS (`eslint`) — undefined vars, likely bugs |
 | `npm run check:links` | Verifies every local `href`/`src` in the HTML points at a file that exists |
 | `npm run check:photos` | Validates `assets/photos/photos.json` — valid JSON, every referenced full + thumb image exists (case-sensitively, like GitHub Pages), no duplicates, sane field types; warns about unlisted images |
-| `npm run check:shows` | Validates `data/shows.json` — valid JSON, real `YYYY-MM-DD` dates, non-empty titles, well-formed buttons |
+| `npm run check:shows` | Validates `data/shows.json` — valid JSON; real `YYYY-MM-DD` dates; required `date`+`title`; well-formed buttons (`url` must be a valid http(s) URL + `text`); **rejects any unexpected field** (catches typos) |
+| `npm run test:shows` | Self-test of the shows validator — proves it accepts good data and rejects each kind of mistake |
 | `npm test` | All of the above |
 
 **Always run `npm test` before opening a PR.** The same suite runs automatically in CI
@@ -92,8 +93,15 @@ Each entry:
 
 Order in the file doesn't matter — it's sorted automatically (upcoming soonest-first, past
 most-recent-first, grouped by year with new years appearing on their own). If there are no
-upcoming shows, the whole "Upcoming Shows" section disappears. Run `npm run check:shows` (part
-of `npm test`) to catch typos like an impossible date or a button missing its text.
+upcoming shows, the whole "Upcoming Shows" section disappears.
+
+**The file is strictly validated** by `npm run check:shows` (part of `npm test`, and run in CI
+on every pull request and push). It will fail — with a friendly message that names the show —
+if anything is off: invalid JSON, a missing/typo'd field name, an impossible or wrongly
+formatted date, a missing title, or a button without a valid http(s) `url` and `text`. So a
+bad edit can't quietly ship. **Tip:** to be sure a broken `shows.json` can never reach the live
+site, edit it via a pull request (or turn on branch protection requiring the CI check to pass
+before merging to `main`).
 
 ## Dropping in the real content
 

@@ -9,8 +9,7 @@
     { "date": "2026-08-07", "title": "Lacey Summer Concerts", "subtitle": "7:00 PM • All ages", "button": { "url": "https://laceyparks.org/events/", "text": "Info & Details" } },
     { "date": "2026-08-09", "title": "Festival at Mt Si", "subtitle": "12:00 PM • All ages", "button": { "url": "https://www.festivalatmtsi.org/schedule.php", "text": "Info & Details" } },
     { "date": "2026-08-20", "title": "Clallam County Fair", "subtitle": "7:30 PM • All ages", "button": { "url": "https://www.clallamcountywa.gov/403/2026-Fair-Entertainment-Events", "text": "Info & Details" } },
-    { "date": "2026-09-19", "title": "Newcastle Days", "subtitle": "5:30 PM • All ages" },
-
+    { "date": "2026-09-19", "title": "Newcastle Days", "subtitle": "5:30 PM • All ages", "button": { "url": "https://newcastlewa.gov/event/newcastle-days/", "text": "Info & Details" } },
     { "date": "2026-05-09", "title": "The Royal Room — Seattle, WA (2 shows)" },
     { "date": "2026-04-11", "title": "Green River College — Auburn, WA" },
     { "date": "2026-03-07", "title": "Jazzbones — Tacoma, WA" },
