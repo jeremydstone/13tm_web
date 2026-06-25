@@ -12,8 +12,9 @@ step. Designed to be hosted free on **GitHub Pages** at the custom domain
 | `pics/index.html`     | `/pics/`    | PICS    | Masonry photo gallery + lightbox |
 | `videos/index.html`   | `/videos/`  | VIDEOS  | Two responsive Vimeo reels |
 | `contact/index.html`  | `/contact/` | CONTACT | Booking form (Web3Forms) |
+| `epk/index.html`      | `/epk/`     | (unlisted) | Electronic press kit — **not in the nav**; share the direct link with booking parties. `noindex` so it stays out of search. |
 
-Nav order site-wide: **SHOWS · PICS · VIDEOS · CONTACT**.
+Nav order site-wide: **SHOWS · PICS · VIDEOS · CONTACT** (EPK is intentionally not in the nav).
 
 **Clean URLs:** each page (except the root) lives in its own folder as `index.html`, so it's
 served at an extension-less path like `/contact/` (a request to `/contact` redirects to it).
