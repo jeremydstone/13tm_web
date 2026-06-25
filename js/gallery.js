@@ -192,7 +192,10 @@
 
   /* ---------- Boot ---------- */
   function start(list) {
-    photos = list;
+    // Optional data-limit on the gallery element shows only the first N
+    // photos (used for the EPK page's 12-image preview).
+    var limit = parseInt(galleryEl.getAttribute("data-limit"), 10);
+    photos = limit > 0 ? list.slice(0, limit) : list;
     buildItems();
     layout();
     window.addEventListener("load", scheduleLayout);

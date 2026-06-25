@@ -628,6 +628,67 @@ h1, h2, h3, h4 {
 }
 .reels-more a:hover { border-color: var(--accent); }
 
+/* ------------------------------ EPK (press kit) ------------------------------ */
+/* Logo by itself at the top, clearing the fixed header. */
+.epk-top {
+  padding-top: calc(var(--header-h) + clamp(18px, 4vh, 40px));
+  padding-bottom: clamp(14px, 3vh, 28px);
+  text-align: center;
+}
+.epk-top img {
+  width: min(360px, 66vw);
+  margin-inline: auto;
+  filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.5));
+}
+/* Full-bleed hero image at ~60% viewport height, so content peeks below. */
+.epk-hero {
+  height: 58svh;
+  min-height: 300px;
+  max-height: 640px;
+  width: 100%;
+  overflow: hidden;
+}
+.epk-hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 28%;
+}
+.epk-bio {
+  font-size: clamp(1rem, 1.75vw, 1.13rem);
+  line-height: 1.6;
+  color: var(--fg);
+}
+.epk-assets__intro { color: var(--muted); max-width: 60ch; margin-bottom: clamp(20px, 3vh, 32px); }
+.epk-assets {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+@media (min-width: 680px) {
+  .epk-assets { grid-template-columns: repeat(3, 1fr); }
+}
+.epk-asset {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: clamp(20px, 2.6vw, 28px);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: linear-gradient(180deg, var(--surface), transparent);
+  transition: border-color 0.2s var(--ease);
+}
+.epk-asset:hover,
+.epk-asset:focus-visible { border-color: var(--accent); }
+.epk-asset__label {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1.15rem;
+  color: var(--fg);
+}
+.epk-asset__hint { color: var(--muted); font-size: 0.92rem; }
+.epk-more { text-align: center; margin-top: clamp(28px, 5vh, 52px); }
+
 /* ------------------------------ Contact form ------------------------------ */
 .contact-grid {
   display: grid;
