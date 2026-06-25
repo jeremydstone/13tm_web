@@ -170,27 +170,37 @@ That's it — submissions get emailed to you. A honeypot field is already includ
 
 ---
 
-## Deploying to GitHub Pages
+## Hosting / deployment
 
-1. Create a GitHub repo and push these files to the default branch.
-2. Repo **Settings → Pages →** set source to your branch, root (`/`).
-3. The included **`CNAME`** file (`13tilmidnight.com`) tells Pages to use the custom domain.
-4. At your domain registrar, point DNS at GitHub Pages:
-   - Four `A` records for the apex `13tilmidnight.com` → `185.199.108.153`,
-     `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
-   - A `CNAME` record for `www` → `<your-username>.github.io`
-5. Back in Settings → Pages, tick **Enforce HTTPS** once the cert provisions.
-6. `.nojekyll` is included so GitHub serves the files as-is (no Jekyll processing).
+**The site is live at https://13tilmidnight.com**, served by **GitHub Pages** (source: `main`
+/ root) over HTTPS. The repo is public; `main` is branch-protected (every change goes through a
+PR that must pass the "Lint & verify" CI check before it can merge). Pushing to `main` rebuilds
+and redeploys the site automatically within ~1 minute. `.nojekyll` makes Pages serve the files
+as-is, and the committed `CNAME` sets the custom domain.
 
-Once DNS propagates you can cancel the Squarespace subscription.
+The domain is registered at **GoDaddy** using GoDaddy's nameservers + DNS:
+- Apex `A` records `13tilmidnight.com` → `185.199.108.153`, `185.199.109.153`,
+  `185.199.110.153`, `185.199.111.153` (plus matching `AAAA` records for IPv6)
+- `CNAME` `www` → `jeremydstone.github.io`
+
+Squarespace (the previous host) is no longer involved.
+
+### Adding/updating shows
+The common ongoing edit is adding shows to `data/shows.json`. For a non-technical editor, see
+**[`SITEUPDATE.md`](SITEUPDATE.md)** — a from-zero, browser-only walkthrough (no git/CLI needed).
 
 ---
 
 ## Design notes
-- **Fonts:** Space Grotesk (display) + Inter (body), loaded from Google Fonts.
+- **Fonts:** Inter for everything, loaded from Google Fonts. Headings and body are kept as
+  separate CSS variables (`--font-display` / `--font-body`, both Inter) so the heading face can
+  be changed in one place later.
 - **Background:** near-black `#07080c` with subtle multi-color glows + faint noise (not flat black).
-- **Animations:** tasteful fade / fly-in reveals on scroll via `IntersectionObserver`; fully
-  disabled for visitors who prefer reduced motion.
+- **Accent:** electric blue. Solid buttons use a deeper indigo→royal gradient (`--btn-grad`) with
+  white text; thinner accents (nav underline, etc.) use the brighter `--accent-grad`.
+- **Animations:** kept minimal/tasteful (scroll-reveal on the Pics/Contact heroes); the SHOWS and
+  Videos pages render everything immediately, and there are no hover effects on the (non-clickable)
+  show cards — both deliberate, to keep scrolling smooth. Reduced-motion is respected.
 - **Responsive:** mobile-first; hamburger menu under 760px; gallery and video frames adapt to
   screen size (videos cap their width on very large monitors).
 - No frameworks, no dependencies, no tracking.
