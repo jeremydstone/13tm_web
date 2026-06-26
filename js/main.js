@@ -50,6 +50,25 @@
     revealEls.forEach(function (el) { io.observe(el); });
   }
 
+  /* ---------- Hero background video: nudge autoplay on mobile ---------- */
+  /* iOS often ignores the autoplay attribute even with muted+playsinline.
+     Force-mute and call play(); retry once it has data and on first touch
+     (a user gesture lets it play even when autoplay is blocked, e.g. Low
+     Power Mode). The poster stays visible if all of that is refused. */
+  var heroVideo = document.querySelector(".hero__media video");
+  if (heroVideo) {
+    heroVideo.muted = true;
+    heroVideo.setAttribute("muted", "");
+    heroVideo.playsInline = true;
+    var playHero = function () {
+      var p = heroVideo.play();
+      if (p && typeof p.catch === "function") p.catch(function () {});
+    };
+    playHero();
+    heroVideo.addEventListener("canplay", playHero, { once: true });
+    document.addEventListener("touchstart", playHero, { once: true, passive: true });
+  }
+
   /* Helper used by other scripts to register newly-added reveal nodes */
   window.__revealObserve = function (nodes) {
     if (reduce || !("IntersectionObserver" in window)) {

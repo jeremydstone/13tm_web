@@ -238,6 +238,7 @@ h1, h2, h3, h4 {
   content: "";
   position: absolute;
   inset: 0;
+  pointer-events: none; /* let taps reach the <video> (tap-to-play on iOS) */
   background:
     linear-gradient(180deg, rgba(7, 8, 12, 0.55) 0%, rgba(7, 8, 12, 0.12) 28%, rgba(7, 8, 12, 0.20) 60%, rgba(7, 8, 12, 0.92) 100%);
 }
@@ -246,6 +247,7 @@ h1, h2, h3, h4 {
   z-index: 2;
   width: min(560px, 76vw);
   margin-bottom: clamp(48px, 9vh, 110px);
+  pointer-events: none; /* don't intercept taps meant for the video below */
   /* Neutral shadow for legibility over the video (the logo carries its own glow). */
   filter: drop-shadow(0 4px 20px rgba(0, 0, 0, 0.55));
 }
